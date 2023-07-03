@@ -389,7 +389,7 @@ FilePathList :: struct {
 // System/Window config flags
 // NOTE: Every bit registers one state (use it with bit masks)
 // By default all flags are set to 0
-ConfigFlags :: enum u32 {
+ConfigFlags :: enum s32 {
 	VSYNC_HINT               :: 64;
 	FULLSCREEN_MODE          :: 2;
 	WINDOW_RESIZABLE         :: 4;
@@ -424,7 +424,7 @@ FLAG_INTERLACED_HINT          :: ConfigFlags.INTERLACED_HINT;
 
 // Trace log level
 // NOTE: Organized by priority level
-TraceLogLevel :: enum u32 {
+TraceLogLevel :: enum s32 {
     ALL     :: 0;
     TRACE   :: 1;
     DEBUG   :: 2;
@@ -446,7 +446,7 @@ LOG_NONE    :: TraceLogLevel.NONE;
 // Keyboard keys (US keyboard layout)
 // NOTE: Use GetKeyPressed() to allow redefining
 // required keys for alternative layouts
-KeyboardKey :: enum u32 {
+KeyboardKey :: enum s32 {
     NULL          :: 0;
 
     APOSTROPHE    :: 39;
@@ -680,7 +680,7 @@ KEY_VOLUME_DOWN   :: KeyboardKey.VOLUME_DOWN;
 
 
 // Mouse buttons
-MouseButton :: enum u32 {
+MouseButton :: enum s32 {
     LEFT    :: 0;
     RIGHT   :: 1;
     MIDDLE  :: 2;
@@ -698,7 +698,7 @@ MOUSE_BUTTON_FORWARD :: MouseButton.FORWARD;
 MOUSE_BUTTON_BACK    :: MouseButton.BACK;
 
 // Mouse cursor
-MouseCursor :: enum u32 {
+MouseCursor :: enum s32 {
 	DEFAULT       :: 0;
 	ARROW         :: 1;
 	IBEAM         :: 2;
@@ -724,7 +724,7 @@ MOUSE_CURSOR_RESIZE_ALL    :: MouseCursor.RESIZE_ALL;
 MOUSE_CURSOR_NOT_ALLOWED   :: MouseCursor.NOT_ALLOWED;
 
 // Gamepad buttons
-GamepadButton :: enum u32 {
+GamepadButton :: enum s32 {
 	UNKNOWN          :: 0;
 	LEFT_FACE_UP     :: 1;
 	LEFT_FACE_RIGHT  :: 2;
@@ -764,7 +764,7 @@ GAMEPAD_BUTTON_LEFT_THUMB       :: GamepadButton.LEFT_THUMB;
 GAMEPAD_BUTTON_RIGHT_THUMB      :: GamepadButton.RIGHT_THUMB;
 
 // Gamepad axis
-GamepadAxis :: enum u32 {
+GamepadAxis :: enum s32 {
 	LEFT_X        :: 0;
 	LEFT_Y        :: 1;
 	RIGHT_X       :: 2;
@@ -780,7 +780,7 @@ GAMEPAD_AXIS_LEFT_TRIGGER  :: GamepadAxis.LEFT_TRIGGER;
 GAMEPAD_AXIS_RIGHT_TRIGGER :: GamepadAxis.RIGHT_TRIGGER;
 
 // Material map index
-MaterialMapIndex :: enum u32 {
+MaterialMapIndex :: enum s32 {
 	ALBEDO     :: 0;
 	METALNESS  :: 1;
 	NORMAL     :: 2;
@@ -806,7 +806,7 @@ MATERIAL_MAP_PREFILTER  :: MaterialMapIndex.PREFILTER;
 MATERIAL_MAP_BRDF       :: MaterialMapIndex.BRDF;
 
 // Shader location index
-ShaderLocationIndex :: enum u32 {
+ShaderLocationIndex :: enum s32 {
 	VERTEX_POSITION   :: 0;
 	VERTEX_TEXCOORD01 :: 1;
 	VERTEX_TEXCOORD02 :: 2;
@@ -862,7 +862,7 @@ SHADER_LOC_MAP_PREFILTER     :: ShaderLocationIndex.MAP_PREFILTER;
 SHADER_LOC_MAP_BRDF          :: ShaderLocationIndex.MAP_BRDF;
 
 // Shader uniform data type
-ShaderUniformDataType :: enum u32 {
+ShaderUniformDataType :: enum s32 {
 	FLOAT     :: 0;
 	VEC2      :: 1;
 	VEC3      :: 2;
@@ -884,7 +884,7 @@ SHADER_UNIFORM_IVEC4     :: ShaderUniformDataType.IVEC4;
 SHADER_UNIFORM_SAMPLER2D :: ShaderUniformDataType.SAMPLER2D;
 
 // Shader attribute data types
-ShaderAttributeDataType :: enum u32 {
+ShaderAttributeDataType :: enum s32 {
 	FLOAT :: 0;
 	VEC2  :: 1;
 	VEC3  :: 2;
@@ -897,7 +897,7 @@ SHADER_ATTRIB_VEC4  :: ShaderAttributeDataType.VEC4;
 
 // Pixel formats
 // NOTE: Support depends on OpenGL version and platform
-PixelFormat :: enum u32 {
+PixelFormat :: enum s32 {
 	UNCOMPRESSED_GRAYSCALE    :: 1;
 	UNCOMPRESSED_GRAY_ALPHA   :: 2;
 	UNCOMPRESSED_R5G6B5       :: 3;
@@ -945,7 +945,7 @@ PIXELFORMAT_COMPRESSED_ASTC_8x8_RGBA  :: PixelFormat.COMPRESSED_ASTC_8x8_RGBA;
 // Texture parameters: filter mode
 // NOTE 1: Filtering considers mipmaps if available in the texture
 // NOTE 2: Filter is accordingly set for minification and magnification
-TextureFilter :: enum u32 {
+TextureFilter :: enum s32 {
 	POINT           :: 0;
 	BILINEAR        :: 1;
 	TRILINEAR       :: 2;
@@ -961,7 +961,7 @@ TEXTURE_FILTER_ANISOTROPIC_8X  :: TextureFilter.ANISOTROPIC_8X;
 TEXTURE_FILTER_ANISOTROPIC_16X :: TextureFilter.ANISOTROPIC_16X;
 
 // Texture parameters: wrap mode
-TextureWrap :: enum u32 {
+TextureWrap :: enum s32 {
 	REPEAT        :: 0;
 	CLAMP         :: 1;
 	MIRROR_REPEAT :: 2;
@@ -973,7 +973,7 @@ TEXTURE_WRAP_MIRROR_REPEAT :: TextureWrap.MIRROR_REPEAT;
 TEXTURE_WRAP_MIRROR_CLAMP  :: TextureWrap.MIRROR_CLAMP;
 
 // Cubemap layouts
-CubemapLayout :: enum u32 {
+CubemapLayout :: enum s32 {
 	AUTO_DETECT         :: 0;
 	LINE_VERTICAL       :: 1;
 	LINE_HORIZONTAL     :: 2;
@@ -989,7 +989,7 @@ CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE :: CubemapLayout.CROSS_FOUR_BY_THREE;
 CUBEMAP_LAYOUT_PANORAMA            :: CubemapLayout.PANORAMA;
 
 // Font type, defines generation method
-FontType :: enum u32 {
+FontType :: enum s32 {
 	DEFAULT :: 0;
 	BITMAP  :: 1;
 	SDF     :: 2;
@@ -999,7 +999,7 @@ FONT_BITMAP  :: FontType.BITMAP;
 FONT_SDF     :: FontType.SDF;
 
 // Color blending modes (pre-defined)
-BlendMode :: enum u32 {
+BlendMode :: enum s32 {
 	ALPHA             :: 0;
 	ADDITIVE          :: 1;
 	MULTIPLIED        :: 2;
@@ -1020,7 +1020,7 @@ BLEND_CUSTOM_SEPARATE   :: BlendMode.CUSTOM_SEPARATE;
 
 // Gesture
 // NOTE: Provided as bit-wise flags to enable only desired gestures
-Gesture :: enum u32 {
+Gesture :: enum s32 {
 	NONE        :: 0;
 	TAP         :: 1;
 	DOUBLETAP   :: 2;
@@ -1079,7 +1079,7 @@ NPATCH_THREE_PATCH_HORIZONTAL :: NPatchLayout.THREE_PATCH_HORIZONTAL;
 
 // Callbacks to hook some internal functions
 // WARNING: These callbacks are intended for advance users
-TraceLogCallback :: #type (logLevel: s32, text: *u8, args: va_list) -> void #c_call;
+TraceLogCallback :: #type (logLevel: TraceLogLevel, text: *u8, args: va_list) -> void #c_call;
 LoadFileDataCallback :: #type (fileName: *u8, bytesRead: *u32) -> *u8 #c_call;
 SaveFileDataCallback :: #type (fileName: *u8, data: *void, bytesToWrite: u32) -> bool #c_call;
 LoadFileTextCallback :: #type (fileName: *u8) -> *u8 #c_call;
@@ -1178,8 +1178,8 @@ LoadShaderFromMemory :: (vsCode: *u8, fsCode: *u8) -> Shader #foreign raylib;
 IsShaderReady :: (shader: Shader) -> bool #foreign raylib;
 GetShaderLocation :: (shader: Shader, uniformName: *u8) -> s32 #foreign raylib;
 GetShaderLocationAttrib :: (shader: Shader, attribName: *u8) -> s32 #foreign raylib;
-SetShaderValue :: (shader: Shader, locIndex: s32, value: *void, uniformType: s32) -> void #foreign raylib;
-SetShaderValueV :: (shader: Shader, locIndex: s32, value: *void, uniformType: s32, count: s32) -> void #foreign raylib;
+SetShaderValue :: (shader: Shader, locIndex: s32, value: *void, uniformType: ShaderUniformDataType) -> void #foreign raylib;
+SetShaderValueV :: (shader: Shader, locIndex: s32, value: *void, uniformType: ShaderUniformDataType, count: s32) -> void #foreign raylib;
 SetShaderValueMatrix :: (shader: Shader, locIndex: s32, mat: Matrix) -> void #foreign raylib;
 SetShaderValueTexture :: (shader: Shader, locIndex: s32, texture: Texture2D) -> void #foreign raylib;
 UnloadShader :: (shader: Shader) -> void #foreign raylib;
@@ -1205,8 +1205,8 @@ SetRandomSeed :: (seed: u32) -> void #foreign raylib;
 TakeScreenshot :: (fileName: *u8) -> void #foreign raylib;
 SetConfigFlags :: (flags: u32) -> void #foreign raylib;
 
-TraceLog_CFormat :: (logLevel: s32, text: *u8, __args: ..Any) -> void #foreign raylib "TraceLog";
-TraceLog :: (logLevel: s32, text: string, __args: ..Any) {
+TraceLog_CFormat :: (logLevel: TraceLogLevel, text: *u8, __args: ..Any) -> void #foreign raylib "TraceLog";
+TraceLog :: (logLevel: TraceLogLevel, text: string, __args: ..Any) {
     push_allocator(temp);
     formatted_text_builder: String_Builder;
     print_to_builder(*formatted_text_builder, text, ..__args);
@@ -1214,7 +1214,7 @@ TraceLog :: (logLevel: s32, text: string, __args: ..Any) {
     formatted_text := builder_to_string(*formatted_text_builder);
     TraceLog_CFormat(logLevel, "%s", formatted_text.data);
 } @PrintLike
-SetTraceLogLevel :: (logLevel: s32) -> void #foreign raylib;
+SetTraceLogLevel :: (logLevel: TraceLogLevel) -> void #foreign raylib;
 MemAlloc :: (size: u32) -> *void #foreign raylib;
 MemRealloc :: (ptr: *void, size: u32) -> *void #foreign raylib;
 MemFree :: (ptr: *void) -> void #foreign raylib;
@@ -1270,26 +1270,26 @@ IsKeyDown :: (key: KeyboardKey) -> bool #foreign raylib;
 IsKeyReleased :: (key: KeyboardKey) -> bool #foreign raylib;
 IsKeyUp :: (key: KeyboardKey) -> bool #foreign raylib;
 SetExitKey :: (key: KeyboardKey) -> void #foreign raylib;
-GetKeyPressed :: () -> s32 #foreign raylib;
-GetCharPressed :: () -> s32 #foreign raylib;
+GetKeyPressed :: () -> KeyboardKey #foreign raylib;
+GetCharPressed :: () -> KeyboardKey #foreign raylib;
 
 // Input-related functions: gamepads
 IsGamepadAvailable :: (gamepad: s32) -> bool #foreign raylib;
 GetGamepadName :: (gamepad: s32) -> *u8 #foreign raylib;
-IsGamepadButtonPressed :: (gamepad: s32, button: s32) -> bool #foreign raylib;
-IsGamepadButtonDown :: (gamepad: s32, button: s32) -> bool #foreign raylib;
-IsGamepadButtonReleased :: (gamepad: s32, button: s32) -> bool #foreign raylib;
-IsGamepadButtonUp :: (gamepad: s32, button: s32) -> bool #foreign raylib;
-GetGamepadButtonPressed :: () -> s32 #foreign raylib;
+IsGamepadButtonPressed :: (gamepad: s32, button: GamepadButton) -> bool #foreign raylib;
+IsGamepadButtonDown :: (gamepad: s32, button: GamepadButton) -> bool #foreign raylib;
+IsGamepadButtonReleased :: (gamepad: s32, button: GamepadButton) -> bool #foreign raylib;
+IsGamepadButtonUp :: (gamepad: s32, button: GamepadButton) -> bool #foreign raylib;
+GetGamepadButtonPressed :: () -> GamepadButton #foreign raylib;
 GetGamepadAxisCount :: (gamepad: s32) -> s32 #foreign raylib;
-GetGamepadAxisMovement :: (gamepad: s32, axis: s32) -> float #foreign raylib;
+GetGamepadAxisMovement :: (gamepad: s32, axis: GamepadAxis) -> float #foreign raylib;
 SetGamepadMappings :: (mappings: *u8) -> s32 #foreign raylib;
 
 // Input-related functions: mouse
-IsMouseButtonPressed :: (button: s32) -> bool #foreign raylib;
-IsMouseButtonDown :: (button: s32) -> bool #foreign raylib;
-IsMouseButtonReleased :: (button: s32) -> bool #foreign raylib;
-IsMouseButtonUp :: (button: s32) -> bool #foreign raylib;
+IsMouseButtonPressed :: (button: MouseButton) -> bool #foreign raylib;
+IsMouseButtonDown :: (button: MouseButton) -> bool #foreign raylib;
+IsMouseButtonReleased :: (button: MouseButton) -> bool #foreign raylib;
+IsMouseButtonUp :: (button: MouseButton) -> bool #foreign raylib;
 GetMouseX :: () -> s32 #foreign raylib;
 GetMouseY :: () -> s32 #foreign raylib;
 GetMousePosition :: () -> Vector2 #foreign raylib;
@@ -1311,9 +1311,9 @@ GetTouchPointCount :: () -> s32 #foreign raylib;
 //------------------------------------------------------------------------------------
 // Gestures and Touch Handling Functions (Module: rgestures)
 //------------------------------------------------------------------------------------
-SetGesturesEnabled :: (flags: u32) -> void #foreign raylib;
-IsGestureDetected :: (gesture: s32) -> bool #foreign raylib;
-GetGestureDetected :: () -> s32 #foreign raylib;
+SetGesturesEnabled :: (flags: Gesture) -> void #foreign raylib;
+IsGestureDetected :: (gesture: Gesture) -> bool #foreign raylib;
+GetGestureDetected :: () -> Gesture #foreign raylib;
 GetGestureHoldDuration :: () -> float #foreign raylib;
 GetGestureDragVector :: () -> Vector2 #foreign raylib;
 GetGestureDragAngle :: () -> float #foreign raylib;
@@ -1333,6 +1333,7 @@ UpdateCameraPro :: (camera: *Camera, movement: Vector3, rotation: Vector3, zoom:
 // NOTE: It can be useful when using basic shapes and one single font,
 // defining a font char white rectangle would allow drawing everything in a single draw call
 SetShapesTexture :: (texture: Texture2D, source: Rectangle) -> void #foreign raylib;
+
 
 // Basic shapes drawing functions
 DrawPixel :: (posX: s32, posY: s32, color: Color) -> void #foreign raylib;
@@ -1414,7 +1415,7 @@ ImageCopy :: (image: Image) -> Image #foreign raylib;
 ImageFromImage :: (image: Image, rec: Rectangle) -> Image #foreign raylib;
 ImageText :: (text: *u8, fontSize: s32, color: Color) -> Image #foreign raylib;
 ImageTextEx :: (font: Font, text: *u8, fontSize: float, spacing: float, tint: Color) -> Image #foreign raylib;
-ImageFormat :: (image: *Image, newFormat: s32) -> void #foreign raylib;
+ImageFormat :: (image: *Image, newFormat: PixelFormat) -> void #foreign raylib;
 ImageToPOT :: (image: *Image, fill: Color) -> void #foreign raylib;
 ImageCrop :: (image: *Image, crop: Rectangle) -> void #foreign raylib;
 ImageAlphaCrop :: (image: *Image, threshold: float) -> void #foreign raylib;
@@ -1467,7 +1468,7 @@ ImageDrawTextEx :: (dst: *Image, font: Font, text: *u8, position: Vector2, fontS
 // NOTE: These functions require GPU access
 LoadTexture :: (fileName: *u8) -> Texture2D #foreign raylib;
 LoadTextureFromImage :: (image: Image) -> Texture2D #foreign raylib;
-LoadTextureCubemap :: (image: Image, layout: s32) -> TextureCubemap #foreign raylib;
+LoadTextureCubemap :: (image: Image, layout: CubemapLayout) -> TextureCubemap #foreign raylib;
 LoadRenderTexture :: (width: s32, height: s32) -> RenderTexture2D #foreign raylib;
 IsTextureReady :: (texture: Texture2D) -> bool #foreign raylib;
 UnloadTexture :: (texture: Texture2D) -> void #foreign raylib;
@@ -1478,8 +1479,8 @@ UpdateTextureRec :: (texture: Texture2D, rec: Rectangle, pixels: *void) -> void 
 
 // Texture configuration functions
 GenTextureMipmaps :: (texture: *Texture2D) -> void #foreign raylib;
-SetTextureFilter :: (texture: Texture2D, filter: s32) -> void #foreign raylib;
-SetTextureWrap :: (texture: Texture2D, wrap: s32) -> void #foreign raylib;
+SetTextureFilter :: (texture: Texture2D, filter: TextureFilter) -> void #foreign raylib;
+SetTextureWrap :: (texture: Texture2D, wrap: TextureWrap) -> void #foreign raylib;
 
 // Texture drawing functions
 DrawTexture :: (texture: Texture2D, posX: s32, posY: s32, tint: Color) -> void #foreign raylib;
@@ -1502,8 +1503,8 @@ ColorContrast :: (color: Color, contrast: float) -> Color #foreign raylib;
 ColorAlpha :: (color: Color, alpha: float) -> Color #foreign raylib;
 ColorAlphaBlend :: (dst: Color, src: Color, tint: Color) -> Color #foreign raylib;
 GetColor :: (hexValue: u32) -> Color #foreign raylib;
-GetPixelColor :: (srcPtr: *void, format: s32) -> Color #foreign raylib;
-SetPixelColor :: (dstPtr: *void, color: Color, format: s32) -> void #foreign raylib;
+GetPixelColor :: (srcPtr: *void, format: PixelFormat) -> Color #foreign raylib;
+SetPixelColor :: (dstPtr: *void, color: Color, format: PixelFormat) -> void #foreign raylib;
 GetPixelDataSize :: (width: s32, height: s32, format: s32) -> s32 #foreign raylib;
 
 // Font loading/unloading functions
@@ -1906,7 +1907,7 @@ EnableDepthMask :: () -> void #foreign raylib "rlEnableDepthMask";
 DisableDepthMask :: () -> void #foreign raylib "rlDisableDepthMask";
 EnableBackfaceCulling :: () -> void #foreign raylib "rlEnableBackfaceCulling";
 DisableBackfaceCulling :: () -> void #foreign raylib "rlDisableBackfaceCulling";
-SetCullFace :: (mode: s32) -> void #foreign raylib "rlSetCullFace";
+SetCullFace :: (mode: CullMode) -> void #foreign raylib "rlSetCullFace";
 EnableScissorTest :: () -> void #foreign raylib "rlEnableScissorTest";
 DisableScissorTest :: () -> void #foreign raylib "rlDisableScissorTest";
 Scissor :: (x: s32, y: s32, width: s32, height: s32) -> void #foreign raylib "rlScissor";
@@ -1923,7 +1924,7 @@ IsStereoRenderEnabled :: () -> bool #foreign raylib "rlIsStereoRenderEnabled";
 ClearColor :: (r: u8, g: u8, b: u8, a: u8) -> void #foreign raylib "rlClearColor";
 ClearScreenBuffers :: () -> void #foreign raylib "rlClearScreenBuffers";
 CheckErrors :: () -> void #foreign raylib "rlCheckErrors";
-SetBlendMode :: (mode: s32) -> void #foreign raylib "rlSetBlendMode";
+SetBlendMode :: (mode: BlendMode) -> void #foreign raylib "rlSetBlendMode";
 SetBlendFactors :: (glSrcFactor: s32, glDstFactor: s32, glEquation: s32) -> void #foreign raylib "rlSetBlendFactors";
 SetBlendFactorsSeparate :: (glSrcRGB: s32, glDstRGB: s32, glSrcAlpha: s32, glDstAlpha: s32, glEqRGB: s32, glEqAlpha: s32) -> void #foreign raylib "rlSetBlendFactorsSeparate";
 
@@ -2022,7 +2023,7 @@ CopyShaderBuffer :: (destId: u32, srcId: u32, destOffset: u32, srcOffset: u32, c
 GetShaderBufferSize :: (id: u32) -> u32 #foreign raylib "rlGetShaderBufferSize";
 
 // Buffer management
-BindImageTexture :: (id: u32, index: u32, format: s32, readonly: bool) -> void #foreign raylib "rlBindImageTexture";
+BindImageTexture :: (id: u32, index: u32, format: PixelFormat, readonly: bool) -> void #foreign raylib "rlBindImageTexture";
 
 // Matrix state management
 GetMatrixModelview :: () -> Matrix #foreign raylib "rlGetMatrixModelview";
