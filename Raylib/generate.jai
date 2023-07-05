@@ -1,5 +1,5 @@
 COMPILE       :: true;
-COMPILE_DEBUG :: false;
+COMPILE_DEBUG :: true;
 
 RAYLIB_PATH :: "src";
 
@@ -22,9 +22,9 @@ DECLARATIONS_TO_OMIT :: string.[
 ];
 
 #run {
-	set_build_options_dc(.{do_output = false}); // Don't build this into executable
+    set_build_options_dc(.{do_output = false}); // Don't build this into executable
 
-	#if COMPILE {
+    #if COMPILE {
         #import "BuildCpp";
 
         raylib_src_files: [..] string;
@@ -41,16 +41,16 @@ DECLARATIONS_TO_OMIT :: string.[
         #if OS == .WINDOWS {
             make_directory_if_it_does_not_exist("windows");
 
-        	// TODO: /D _CRT_SECURE_NO_WARNINGS
-        	raylib_flags: [..] string;
-        	array_add(*raylib_flags, ..string.["/D_DEFAULT_SOURCE", "/DPLATFORM_DESKTOP", "/DGRAPHICS_API_OPENGL_33"]);
-        	array_add(*raylib_flags, ..string.["/Isrc\\src", "/Isrc\\src\\external\\glfw\\include"]);
-        	#if COMPILE_DEBUG {
-        		array_add(*raylib_flags, ..string.["/std:c11", "/Od", "/Zi", "/utf-8", "/validate-charset", "/EHsc", "/w"]);
-        	} else {
-        		array_add(*raylib_flags, ..string.["/std:c11", "/O1", "/GL", "/favor:blend", "/utf-8", "/validate-charset", "/EHsc", "/w"]);
-        	}
-        	
+            // TODO: /D _CRT_SECURE_NO_WARNINGS
+            raylib_flags: [..] string;
+            array_add(*raylib_flags, ..string.["/D_DEFAULT_SOURCE", "/DPLATFORM_DESKTOP", "/DGRAPHICS_API_OPENGL_33"]);
+            array_add(*raylib_flags, ..string.["/Isrc\\src", "/Isrc\\src\\external\\glfw\\include"]);
+            #if COMPILE_DEBUG {
+                array_add(*raylib_flags, ..string.["/std:c11", "/Od", "/Zi", "/utf-8", "/validate-charset", "/EHsc", "/w"]);
+            } else {
+                array_add(*raylib_flags, ..string.["/std:c11", "/O1", "/GL", "/favor:blend", "/utf-8", "/validate-charset", "/EHsc", "/w"]);
+            }
+            
             success &&= build_cpp_static_lib("windows/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
         } else #if OS == .LINUX {
             make_directory_if_it_does_not_exist("linux");
@@ -63,44 +63,44 @@ DECLARATIONS_TO_OMIT :: string.[
                 array_add(*raylib_flags, ..string.["-std=c99", "-Os", "-flto"]);
             }
 
-            success &&= build_cpp_dynamic_lib("linux/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
-            // success &&= build_cpp_static_lib("linux/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
+            // success &&= build_cpp_dynamic_lib("linux/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
+            success &&= build_cpp_static_lib("linux/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
         } else {
             assert(false);
         }
 
         if !success exit(1);
     }
-	
-	output_filename: string;
-	opts: Generate_Bindings_Options;
-	{
-		using opts;
+    
+    output_filename: string;
+    opts: Generate_Bindings_Options;
+    {
+        using opts;
 
-		strip_flags = 0;
-		generate_compile_time_struct_checks = false;
-		visitor = raylib_visitor;
+        strip_flags = 0;
+        generate_compile_time_struct_checks = false;
+        visitor = raylib_visitor;
 
-		array_add(*include_paths, ..string.["src/src", "src/src/external/glfw/include"]);
-		array_add(*libnames, "raylib");
-		array_add(*source_files,  ..string.["src/src/raylib.h", "src/src/rlgl.h"]);
-		array_add(*system_include_paths, GENERATOR_DEFAULT_SYSTEM_INCLUDE_PATH);
-		array_add(*extra_clang_arguments, "-x", "c");
+        array_add(*include_paths, ..string.["src/src", "src/src/external/glfw/include"]);
+        array_add(*libnames, "raylib");
+        array_add(*source_files,  ..string.["src/src/raylib.h", "src/src/rlgl.h"]);
+        array_add(*system_include_paths, GENERATOR_DEFAULT_SYSTEM_INCLUDE_PATH);
+        array_add(*extra_clang_arguments, "-x", "c");
 
-		#if OS == .WINDOWS {
- 			array_add(*libpaths, "windows");
+        #if OS == .WINDOWS {
+            array_add(*libpaths, "windows");
             output_filename = "windows.jai";
         } else #if OS == .LINUX {
             array_add(*libpaths, "linux");
             output_filename = "linux.jai";
         } else { assert(false); }
-	}
+    }
 
-	generate_bindings(opts, output_filename);
+    generate_bindings(opts, output_filename);
 }
 
 raylib_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_Visit_Result {
-	if !parent_decl {
+    if !parent_decl {
         if array_find(DECLARATIONS_TO_OMIT, decl.name) {
             decl.decl_flags |= .OMIT_FROM_OUTPUT;
             return .STOP;

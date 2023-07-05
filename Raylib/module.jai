@@ -1,8 +1,6 @@
 #import "Math";
 
-#if OS == .WINDOWS {
-    #load "windows.jai";
-} else #if OS == .LINUX {
+#if OS == .LINUX {
     #load "linux.jai";
 } else {
     #assert(false, message = "Unsupported OS");

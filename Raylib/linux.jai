@@ -2042,4 +2042,4 @@ LoadDrawQuad :: () -> void #foreign raylib "rlLoadDrawQuad";
 
 #scope_file
 
-raylib :: #library "linux/raylib";
+raylib :: #library,no_dll "linux/raylib";
