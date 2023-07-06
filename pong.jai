@@ -1,7 +1,8 @@
-#import,dir "Raylib";
 #import "Basic"()(MEMORY_DEBUGGER=true);
 #import "Math";
 #import "Random";
+#import,dir "Raylib";
+using RL;
 
 fit :: (rect : Rectangle, ratio := 1.5) -> Rectangle {
 	new_width := rect.height * ratio;
@@ -60,8 +61,8 @@ main :: () {
 
 	BALL_RAD :: 0.03;
 	draw_scene :: () #expand {
-		BeginDrawing(); defer EndDrawing();
 
+		BeginDrawing(); defer EndDrawing();
 		ClearBackground(GRAY);
 		zone := get_active_zone();
 		DrawRectangleRec(zone, BLACK);
