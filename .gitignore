@@ -1,1 +1,6 @@
 .build/
+examples/pong
+examples/meshes
+examples/ray_collision
+examples/raygui_minimum
+examples/.build/

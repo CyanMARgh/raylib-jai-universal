@@ -783,5 +783,11 @@ ICON_254                     :: IconName._254;
 ICON_255                     :: IconName._255;
 
 #scope_file
+#if OS == .LINUX {
+    raygui :: #library,no_dll "linux/raygui";
+} else #if OS == .WINDOWS {
+    // raygui :: #library,no_dll "windows/librayguidll";
+    raygui :: #library "windows/librayguidll";
+}
 
-raygui :: #library,no_dll "raygui";
+

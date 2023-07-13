@@ -2146,4 +2146,8 @@ LoadDrawQuad :: () -> void #foreign raylib "rlLoadDrawQuad";
 
 #scope_file
 
-raylib :: #library,no_dll "raylib";
+#if OS == .LINUX {
+    raylib :: #library,no_dll "linux/raylib";
+} else #if OS == .WINDOWS {
+    raylib :: #library,no_dll "windows/raylib";
+}
