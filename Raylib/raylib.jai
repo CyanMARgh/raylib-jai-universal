@@ -7,6 +7,8 @@
 
 #import "Math";
 
+#load "extra.jai";
+
 RAYLIB_VERSION_MAJOR :: 4;
 RAYLIB_VERSION_MINOR :: 5;
 RAYLIB_VERSION_PATCH :: 0;

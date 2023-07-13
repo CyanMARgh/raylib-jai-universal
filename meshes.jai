@@ -77,7 +77,7 @@ main :: () {
 
 	W0, H0 :: 1200, 800;
 
-	InitWindow(W0, H0, "pong"); defer CloseWindow();
+	InitWindow(W0, H0, "meshes"); defer CloseWindow();
 	camera := Camera.{.{5, 5, 5}, .{0, 0, 0}, .{0, 1, 0}, 45, 0};
 	position := Vector3.{0, 0, 0};
 
