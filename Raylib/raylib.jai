@@ -1400,7 +1400,7 @@ SetMouseOffset :: (offsetX: s32, offsetY: s32) -> void #foreign raylib;
 SetMouseScale :: (scaleX: float, scaleY: float) -> void #foreign raylib;
 GetMouseWheelMove :: () -> float #foreign raylib;
 GetMouseWheelMoveV :: () -> Vector2 #foreign raylib;
-SetMouseCursor :: (cursor: s32) -> void #foreign raylib;
+SetMouseCursor :: (cursor: MouseCursor) -> void #foreign raylib;
 
 // Input-related functions: touch
 GetTouchX :: () -> s32 #foreign raylib;
