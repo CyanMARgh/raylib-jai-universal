@@ -83,7 +83,7 @@ DECLARATIONS_TO_OMIT :: string.[
 
         array_add(*include_paths, ..string.["src/src", "src/src/external/glfw/include"]);
         array_add(*libnames, "raylib");
-        array_add(*source_files,  ..string.["src/src/raylib.h", "src/src/rlgl.h"]);
+        array_add(*source_files,  ..string.["src/src/raylib.h", "src/src/rlgl.h", "src/src/rcamera.h"]);
         array_add(*system_include_paths, GENERATOR_DEFAULT_SYSTEM_INCLUDE_PATH);
         array_add(*extra_clang_arguments, "-x", "c");
 
@@ -96,7 +96,7 @@ DECLARATIONS_TO_OMIT :: string.[
         } else { assert(false); }
     }
 
-    generate_bindings(opts, output_filename);
+    // generate_bindings(opts, output_filename);
 }
 
 raylib_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration_Visit_Result {

@@ -1,3 +1,11 @@
+// GetMonitorName :: (monitor: s32) -> *u8 #foreign raylib;
+
+// void CameraRoll(Camera *camera, float angle)
+
+// CameraRoll :: (camera : *Camera, angle : float) -> void #foreign raylib;
+// GetCameraForward :: (camera : *Camera) -> Vector3 #foreign raylib;
+
+
 sign :: (x : $T) -> int {
 	return ifx x < 0 then -1 else ifx x > 0 then 1 else 0;
 }

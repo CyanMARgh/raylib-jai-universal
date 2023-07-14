@@ -2144,6 +2144,27 @@ SetMatrixViewOffsetStereo :: (right: Matrix, left: Matrix) -> void #foreign rayl
 LoadDrawCube :: () -> void #foreign raylib "rlLoadDrawCube";
 LoadDrawQuad :: () -> void #foreign raylib "rlLoadDrawQuad";
 
+// Camera basis
+GetCameraForward :: (camera: *Camera) -> Vector3 #foreign raylib;
+GetCameraUp :: (camera: *Camera) -> Vector3 #foreign raylib;
+GetCameraRight :: (camera: *Camera) -> Vector3 #foreign raylib;
+
+// Camera movement
+GetCameraForward :: (camera : *Camera) -> Vector3 #foreign raylib;
+
+CameraMoveForward :: (camera: *Camera, distance: float, moveInWorldPlane: bool) -> void #foreign raylib;
+CameraMoveUp :: (camera: *Camera, distance: float) -> void #foreign raylib;
+CameraMoveRight :: (camera: *Camera, distance: float, moveInWorldPlane: bool) -> void #foreign raylib;
+CameraMoveToTarget :: (camera: *Camera, delta: float) -> void #foreign raylib;
+
+// Camera rotation
+CameraYaw :: (camera: *Camera, angle: float, rotateAroundTarget: bool) -> void #foreign raylib;
+CameraPitch :: (camera: *Camera, angle: float, lockView: bool, rotateAroundTarget: bool, rotateUp: bool) -> void #foreign raylib;
+CameraRoll :: (camera: *Camera, angle: float) -> void #foreign raylib;
+
+GetCameraViewMatrix :: (camera: *Camera) -> Matrix #foreign raylib;
+GetCameraProjectionMatrix :: (camera: *Camera, aspect: float) -> Matrix #foreign raylib;
+
 #scope_file
 
 #if OS == .LINUX {
