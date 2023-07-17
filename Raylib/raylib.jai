@@ -1236,7 +1236,7 @@ GetTime :: () -> float64 #foreign raylib;
 GetRandomValue :: (min: s32, max: s32) -> s32 #foreign raylib;
 SetRandomSeed :: (seed: u32) -> void #foreign raylib;
 TakeScreenshot :: (fileName: *u8) -> void #foreign raylib;
-SetConfigFlags :: (flags: u32) -> void #foreign raylib;
+SetConfigFlags :: (flags: ConfigFlags) -> void #foreign raylib;
 
 TraceLog_CFormat :: (logLevel: TraceLogLevel, text: *u8, __args: ..Any) -> void #foreign raylib "TraceLog";
 TraceLog :: (logLevel: TraceLogLevel, text: string, __args: ..Any) {
