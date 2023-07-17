@@ -38,30 +38,68 @@ random_reflect :: (_v : Vector2, right : bool) -> Vector2 {
     if !right v.x = -v.x;
     return v;
 }
+
+// rl_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory: *void, allocator_data: *void) -> *void {
+// 	if mode == {
+// 		case .ALLOCATE;
+// 		return MemAlloc(xx size);
+
+// 		case .RESIZE;
+// 		return MemRealloc(old_memory, xx size);		
+
+// 		// case .FREE;
+// 		// MemFree(old_memory);
+// 		// return null;
+
+// 		// case .STARTUP;
+// 		// return null;
+
+// 		// case .SHUTDOWN;
+// 		// return null;
+
+// 		case;
+// 		assert(false, "invalid operation: %!", mode);
+// 	}
+// 	return null;
+// }
+
+// RL_ALLOCATOR :: Allocator.{
+// 	rl_allocator_proc,
+// 	null
+// };
+
 GenMeshCustom :: () -> Mesh {
+	vertices : []Vector3;
+	vertices.data = xx MemAlloc(3 * size_of(Vector3));
+	vertices.count = 3;
+	vertices[0] = .{0, 0, 0};
+	vertices[1] = .{3, 4, 5};
+	vertices[2] = .{2, 0, 0};
+
+	// vertices : [..]Vector3;
+	// vertices.allocator = RL_ALLOCATOR;
+	// array_add(*vertices, .{0, 0, 0});
+	// array_add(*vertices, .{3, 4, 5});
+	// array_add(*vertices, .{2, 0, 0});
+	// print("%\n", vertices);
+
+	// normals := array_copy(Vector3.[
+	// 	.{0, 1, 0},
+	// 	.{0, 1, 0},
+	// 	.{0, 1, 0}
+	// ]);
+	// texcoords := array_copy(Vector2.[
+	// 	.{0, 0},
+	// 	.{.5, 1},
+	// 	.{1, 0}
+	// ]);
+
 	mesh : Mesh;
 	mesh.triangleCount = 1;
 	mesh.vertexCount = mesh.triangleCount * 3;
-
-	vertices := array_copy(Vector3.[
-		.{0, 0, 0},
-		.{3, 4, 5},
-		.{2, 0, 0},
-	]);
-	normals := array_copy(Vector3.[
-		.{0, 1, 0},
-		.{0, 1, 0},
-		.{0, 1, 0}
-	]);
-	texcoords := array_copy(Vector2.[
-		.{0, 0},
-		.{.5, 1},
-		.{1, 0}
-	]);
-
 	mesh.vertices = xx vertices.data;
-	mesh.texcoords = xx texcoords.data;
-	mesh.normals = xx normals.data;
+	// mesh.texcoords = xx texcoords.data;
+	// mesh.normals = xx normals.data;
 
 	UploadMesh(*mesh, false);
 	return mesh;
@@ -73,6 +111,7 @@ free_mesh :: (using mesh : Mesh) {
 }
 
 main :: () {
+	__ctx = *context;
 	defer report_memory_leaks();
 
 	W0, H0 :: 1200, 800;
@@ -81,13 +120,13 @@ main :: () {
 	camera := Camera.{.{5, 5, 5}, .{0, 0, 0}, .{0, 1, 0}, 45, 0};
 	position := Vector3.{0, 0, 0};
 
-	img_checked := GenImageChecked(2, 2, 1, 1, RED, GREEN);
+	img_checked := GenImageChecked(2, 2, 1, 1, RED, GREEN); defer UnloadImage(img_checked);
 	texture := LoadTextureFromImage(img_checked);
 
 	print("(3)\n");
-	mesh := GenMeshCustom(); defer free_mesh(mesh);
+	mesh := GenMeshCustom();// defer free_mesh(mesh);
 	// mesh := GenMeshPlane(2, 2, 5, 5);
-	model := LoadModelFromMesh(mesh);	
+	model := LoadModelFromMesh(mesh); defer UnloadModel(model);
 
 	draw_scene :: () #expand {
 		BeginDrawing(); defer EndDrawing();

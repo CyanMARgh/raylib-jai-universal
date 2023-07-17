@@ -5,12 +5,10 @@
 // CameraRoll :: (camera : *Camera, angle : float) -> void #foreign raylib;
 // GetCameraForward :: (camera : *Camera) -> Vector3 #foreign raylib;
 
-
-sign :: (x : $T) -> int {
-	return ifx x < 0 then -1 else ifx x > 0 then 1 else 0;
-}
-
 GetRayCollisionCylinder :: (ray : Ray, a : Vector3, b : Vector3, ra : float) -> RayCollision {
+    sign :: (x : $T) -> int {
+    	return ifx x < 0 then -1 else ifx x > 0 then 1 else 0;
+    }
 	ro, rd := ray.position, ray.direction;
 	ba := b  - a;
 	oc := ro - a;
@@ -45,11 +43,6 @@ GetRayCollisionCylinder :: (ray : Ray, a : Vector3, b : Vector3, ra : float) -> 
 		};
 	}
 	return .{hit = false};
-}
-
-get_rlgl_ptr :: () -> *RLGL_Data {
-    getRlglPtr :: () -> *void #foreign raylib;
-    return xx getRlglPtr();
 }
 
 RLGL_Data :: struct {
@@ -122,3 +115,59 @@ RLGL_Data :: struct {
         maxDepthBits : int;
     };
 }
+get_rlgl_ptr :: () -> *RLGL_Data {
+    getRlglPtr :: () -> *void #foreign raylib;
+    return xx getRlglPtr();
+}
+
+update_camera_free_move :: (camera : *Camera) {
+    dt := GetFrameTime();
+    {
+        speed := 5.;
+        x := cast(float)(cast(int)IsKeyDown(.D)) - (cast(int)IsKeyDown(.A));
+        y := cast(float)(cast(int)IsKeyDown(.SPACE)) - (cast(int)IsKeyDown(.LEFT_SHIFT));
+        z := cast(float)(cast(int)IsKeyDown(.W)) - (cast(int)IsKeyDown(.S));
+
+        CameraMoveRight(camera, speed * x * dt, true);
+        CameraMoveUp(camera, speed * y * dt);
+        CameraMoveForward(camera, speed * z * dt, true);        
+    }
+    {
+        speed := .0025;
+        delta := GetMouseDelta();
+        CameraYaw(camera, -delta.x * speed, false);
+        CameraPitch(camera, -delta.y * speed, true, false, false);
+    }
+}
+
+__ctx : *Context;
+
+#program_export "jai_malloc"
+jai_malloc_for_raylib :: (size: u64) -> *void #c_call {
+	// get the current context pointer from somewhere. you will have to store it before calling into raylib
+	push_context __ctx.* {
+		return alloc(xx size);
+	}
+}
+#program_export "jai_calloc"
+jai_calloc_for_raylib :: (num : u64, size: u64) -> *void #c_call {
+	push_context __ctx.* {
+		return alloc(xx (size * num));
+	}
+}
+#program_export "jai_free"
+jai_free_for_raylib :: (ptr : *void) #c_call {
+	push_context __ctx.* {
+		free(ptr);
+	}
+}
+
+#program_export "jai_realloc"
+jai_realloc_for_raylib :: (ptr : *void, newsize : u64) -> *void #c_call {
+	push_context __ctx.* {
+		free(ptr);
+		return alloc(xx newsize);
+	}
+}
+#scope_file
+#import "Basic";
