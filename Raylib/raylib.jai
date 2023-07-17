@@ -110,76 +110,6 @@ RL_BLEND_DST_ALPHA :: 0x80CA;
 RL_BLEND_SRC_ALPHA :: 0x80CB;
 RL_BLEND_COLOR :: 0x8005;
 
-RLGL_Data :: struct {
-    currentBatch : *RenderBatch;
-    defaultBatch :  RenderBatch;
-
-    State : struct {
-        vertexCounter : s32;
-        texcoordx, texcoordy : float;
-        normalx, normaly, normalz : float;
-        colorr, colorg, colorb, colora : u8;
-
-        currentMatrixMode : s32;
-        currentMatrix : *Matrix;
-        modelview  : Matrix;
-        projection : Matrix;
-        transform  : Matrix;
-        transformRequired : bool;
-        stack : [RL_MAX_MATRIX_STACK_SIZE]Matrix;
-        stackCounter : s32;
-
-        defaultTextureId  :  u32;
-        activeTextureId   : [RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS]u32;
-        defaultVShaderId  :  u32;
-        defaultFShaderId  :  u32;
-        defaultShaderId   :  u32;
-        defaultShaderLocs : *s32;
-        currentShaderId   :  u32;
-        currentShaderLocs : *s32;
-
-        stereoRender : bool;
-        projectionStereo : [2]Matrix;
-        viewOffsetStereo : [2]Matrix;
-
-
-        currentBlendMode        : s32;
-        glBlendSrcFactor        : s32;
-        glBlendDstFactor        : s32;
-        glBlendEquation         : s32;
-        glBlendSrcFactorRGB     : s32;
-        glBlendDestFactorRGB    : s32;
-        glBlendSrcFactorAlpha   : s32;
-        glBlendDestFactorAlpha  : s32;
-        glBlendEquationRGB      : s32;
-        glBlendEquationAlpha    : s32;
-        glCustomBlendModeModified : bool;
-
-        framebufferWidth    : s32;
-        framebufferHeight   : s32;
-    };
-
-    ExtSupported : struct {
-        vao             : bool;
-        instancing      : bool;
-        texNPOT         : bool;
-        texDepth        : bool;
-        texDepthWebGL   : bool;
-        texFloat32      : bool;
-        texCompDXT      : bool;
-        texCompETC1     : bool;
-        texCompETC2     : bool;
-        texCompPVRT     : bool;
-        texCompASTC     : bool;
-        texMirrorClamp  : bool;                
-        texAnisoFilter  : bool;
-        computeShader   : bool;
-        ssbo            : bool;
-
-        maxAnisotropyLevel : float;
-        maxDepthBits : int;
-    };
-}
 LIGHTGRAY  :: Color.{ 200, 200, 200, 255 };   // Light Gray
 GRAY       :: Color.{ 130, 130, 130, 255 };   // Gray
 DARKGRAY   :: Color.{ 80, 80, 80, 255 }   ;   // Dark Gray
@@ -1252,7 +1182,7 @@ DisableCursor :: () -> void #foreign raylib;
 IsCursorOnScreen :: () -> bool #foreign raylib;
 
 // Drawing-related functions
-ClearBackground :: (color: Color) -> void #foreign raylib;
+ClearBackground :: (color: Color = RAYWHITE) -> void #foreign raylib;
 BeginDrawing :: () -> void #foreign raylib;
 EndDrawing :: () -> void #foreign raylib;
 BeginMode2D :: (camera: Camera2D) -> void #foreign raylib;
@@ -1624,7 +1554,7 @@ UnloadFont :: (font: Font) -> void #foreign raylib;
 ExportFontAsCode :: (font: Font, fileName: *u8) -> bool #foreign raylib;
 
 // Text drawing functions
-DrawFPS :: (posX: s32, posY: s32) -> void #foreign raylib;
+DrawFPS :: (posX: s32 = 20, posY: s32 = 20) -> void #foreign raylib;
 DrawText :: (text: *u8, posX: s32, posY: s32, fontSize: s32, color: Color) -> void #foreign raylib;
 DrawTextEx :: (font: Font, text: *u8, position: Vector2, fontSize: float, spacing: float, tint: Color) -> void #foreign raylib;
 DrawTextPro :: (font: Font, text: *u8, position: Vector2, origin: Vector2, rotation: float, fontSize: float, spacing: float, tint: Color) -> void #foreign raylib;
@@ -2036,10 +1966,6 @@ SetBlendFactorsSeparate :: (glSrcRGB: s32, glDstRGB: s32, glSrcAlpha: s32, glDst
 // Functions Declaration - rlgl functionality
 //------------------------------------------------------------------------------------
 // rlgl initialization functions
-get_rlgl_ptr :: () -> *RLGL_Data {
-    getRlglPtr :: () -> *void #foreign raylib;
-    return xx getRlglPtr();
-}
 
 getRlglPtr :: () -> *void #foreign raylib;
 glInit :: (width: s32, height: s32) -> void #foreign raylib "rlglInit";
@@ -2150,8 +2076,6 @@ GetCameraUp :: (camera: *Camera) -> Vector3 #foreign raylib;
 GetCameraRight :: (camera: *Camera) -> Vector3 #foreign raylib;
 
 // Camera movement
-GetCameraForward :: (camera : *Camera) -> Vector3 #foreign raylib;
-
 CameraMoveForward :: (camera: *Camera, distance: float, moveInWorldPlane: bool) -> void #foreign raylib;
 CameraMoveUp :: (camera: *Camera, distance: float) -> void #foreign raylib;
 CameraMoveRight :: (camera: *Camera, distance: float, moveInWorldPlane: bool) -> void #foreign raylib;

@@ -46,3 +46,79 @@ GetRayCollisionCylinder :: (ray : Ray, a : Vector3, b : Vector3, ra : float) -> 
 	}
 	return .{hit = false};
 }
+
+get_rlgl_ptr :: () -> *RLGL_Data {
+    getRlglPtr :: () -> *void #foreign raylib;
+    return xx getRlglPtr();
+}
+
+RLGL_Data :: struct {
+    currentBatch : *RenderBatch;
+    defaultBatch :  RenderBatch;
+
+    State : struct {
+        vertexCounter : s32;
+        texcoordx, texcoordy : float;
+        normalx, normaly, normalz : float;
+        colorr, colorg, colorb, colora : u8;
+
+        currentMatrixMode : s32;
+        currentMatrix : *Matrix;
+        modelview  : Matrix;
+        projection : Matrix;
+        transform  : Matrix;
+        transformRequired : bool;
+        stack : [RL_MAX_MATRIX_STACK_SIZE]Matrix;
+        stackCounter : s32;
+
+        defaultTextureId  :  u32;
+        activeTextureId   : [RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS]u32;
+        defaultVShaderId  :  u32;
+        defaultFShaderId  :  u32;
+        defaultShaderId   :  u32;
+        defaultShaderLocs : *s32;
+        currentShaderId   :  u32;
+        currentShaderLocs : *s32;
+
+        stereoRender : bool;
+        projectionStereo : [2]Matrix;
+        viewOffsetStereo : [2]Matrix;
+
+
+        currentBlendMode        : s32;
+        glBlendSrcFactor        : s32;
+        glBlendDstFactor        : s32;
+        glBlendEquation         : s32;
+        glBlendSrcFactorRGB     : s32;
+        glBlendDestFactorRGB    : s32;
+        glBlendSrcFactorAlpha   : s32;
+        glBlendDestFactorAlpha  : s32;
+        glBlendEquationRGB      : s32;
+        glBlendEquationAlpha    : s32;
+        glCustomBlendModeModified : bool;
+
+        framebufferWidth    : s32;
+        framebufferHeight   : s32;
+    };
+
+    ExtSupported : struct {
+        vao             : bool;
+        instancing      : bool;
+        texNPOT         : bool;
+        texDepth        : bool;
+        texDepthWebGL   : bool;
+        texFloat32      : bool;
+        texCompDXT      : bool;
+        texCompETC1     : bool;
+        texCompETC2     : bool;
+        texCompPVRT     : bool;
+        texCompASTC     : bool;
+        texMirrorClamp  : bool;                
+        texAnisoFilter  : bool;
+        computeShader   : bool;
+        ssbo            : bool;
+
+        maxAnisotropyLevel : float;
+        maxDepthBits : int;
+    };
+}
