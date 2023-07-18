@@ -140,34 +140,38 @@ update_camera_free_move :: (camera : *Camera) {
     }
 }
 
-__ctx : *Context;
+global_context_for_raylib : *Context;
 
-#program_export "jai_malloc"
-jai_malloc_for_raylib :: (size: u64) -> *void #c_call {
-	// get the current context pointer from somewhere. you will have to store it before calling into raylib
-	push_context __ctx.* {
-		return alloc(xx size);
-	}
-}
-#program_export "jai_calloc"
-jai_calloc_for_raylib :: (num : u64, size: u64) -> *void #c_call {
-	push_context __ctx.* {
-		return alloc(xx (size * num));
-	}
-}
-#program_export "jai_free"
-jai_free_for_raylib :: (ptr : *void) #c_call {
-	push_context __ctx.* {
-		free(ptr);
-	}
-}
-
-#program_export "jai_realloc"
-jai_realloc_for_raylib :: (ptr : *void, newsize : u64) -> *void #c_call {
-	push_context __ctx.* {
-		free(ptr);
-		return alloc(xx newsize);
-	}
-}
 #scope_file
+#if OS == .LINUX {
+	#program_export "jai_malloc"
+	jai_malloc_for_raylib :: (size: u64) -> *void #c_call {
+		ctx := ifx global_context_for_raylib then global_context_for_raylib.* else .{};
+		push_context ctx {
+			return alloc(xx size);
+		}
+	}
+	#program_export "jai_calloc"
+	jai_calloc_for_raylib :: (num : u64, size: u64) -> *void #c_call {
+		ctx := ifx global_context_for_raylib then global_context_for_raylib.* else .{};
+		push_context ctx {
+			return alloc(xx (size * num));
+		}
+	}
+	#program_export "jai_free"
+	jai_free_for_raylib :: (ptr : *void) #c_call {
+		ctx := ifx global_context_for_raylib then global_context_for_raylib.* else .{};
+		push_context ctx {
+			free(ptr);
+		}
+	}
+	#program_export "jai_realloc"
+	jai_realloc_for_raylib :: (ptr : *void, newsize : u64) -> *void #c_call {
+		ctx := ifx global_context_for_raylib then global_context_for_raylib.* else .{};
+		push_context ctx {
+			free(ptr);
+			return alloc(xx newsize);
+		}
+	}
+}
 #import "Basic";

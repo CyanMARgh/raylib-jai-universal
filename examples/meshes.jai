@@ -69,49 +69,21 @@ random_reflect :: (_v : Vector2, right : bool) -> Vector2 {
 // };
 
 GenMeshCustom :: () -> Mesh {
-	vertices : []Vector3;
-	vertices.data = xx MemAlloc(3 * size_of(Vector3));
-	vertices.count = 3;
-	vertices[0] = .{0, 0, 0};
-	vertices[1] = .{3, 4, 5};
-	vertices[2] = .{2, 0, 0};
-
-	// vertices : [..]Vector3;
-	// vertices.allocator = RL_ALLOCATOR;
-	// array_add(*vertices, .{0, 0, 0});
-	// array_add(*vertices, .{3, 4, 5});
-	// array_add(*vertices, .{2, 0, 0});
-	// print("%\n", vertices);
-
-	// normals := array_copy(Vector3.[
-	// 	.{0, 1, 0},
-	// 	.{0, 1, 0},
-	// 	.{0, 1, 0}
-	// ]);
-	// texcoords := array_copy(Vector2.[
-	// 	.{0, 0},
-	// 	.{.5, 1},
-	// 	.{1, 0}
-	// ]);
+	vertices : [..]Vector3;
+	array_add(*vertices, .{0, 0, 0});
+	array_add(*vertices, .{3, 4, 5});
+	array_add(*vertices, .{2, 0, 0});
 
 	mesh : Mesh;
 	mesh.triangleCount = 1;
 	mesh.vertexCount = mesh.triangleCount * 3;
 	mesh.vertices = xx vertices.data;
-	// mesh.texcoords = xx texcoords.data;
-	// mesh.normals = xx normals.data;
 
 	UploadMesh(*mesh, false);
 	return mesh;
 }
-free_mesh :: (using mesh : Mesh) {
-	free(vertices);
-	free(texcoords);
-	free(normals);
-}
 
 main :: () {
-	__ctx = *context;
 	defer report_memory_leaks();
 
 	W0, H0 :: 1200, 800;
@@ -123,9 +95,7 @@ main :: () {
 	img_checked := GenImageChecked(2, 2, 1, 1, RED, GREEN); defer UnloadImage(img_checked);
 	texture := LoadTextureFromImage(img_checked);
 
-	print("(3)\n");
-	mesh := GenMeshCustom();// defer free_mesh(mesh);
-	// mesh := GenMeshPlane(2, 2, 5, 5);
+	mesh := GenMeshCustom();
 	model := LoadModelFromMesh(mesh); defer UnloadModel(model);
 
 	draw_scene :: () #expand {
