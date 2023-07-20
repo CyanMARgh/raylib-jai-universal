@@ -93,23 +93,28 @@ main :: () {
 	position := Vector3.{0, 0, 0};
 
 	img_checked := GenImageChecked(2, 2, 1, 1, RED, GREEN); defer UnloadImage(img_checked);
-	texture := LoadTextureFromImage(img_checked);
+	texture := LoadTextureFromImage(img_checked); defer UnloadTexture(texture);
 
 	mesh := GenMeshCustom();
 	model := LoadModelFromMesh(mesh); defer UnloadModel(model);
 
 	draw_scene :: () #expand {
-		BeginDrawing(); defer EndDrawing();
+		ctx := context;
+		ctx.allocator = temp;
+		push_context ctx {
+			global_context_for_raylib = *context;
+			BeginDrawing(); defer EndDrawing();
 
-		ClearBackground(WHITE);
-		BeginMode3D(camera);
-			DrawGrid(10, 1.0);
-			DrawModel(model, position, 1., RED);
-		EndMode3D();
+			ClearBackground(WHITE);
+			BeginMode3D(camera);
+				DrawGrid(10, 1.0);
+				DrawModel(model, position, 1., RED);
+			EndMode3D();
 
-		DrawFPS(20, 20);
+			DrawFPS(20, 20);
+		}
+		global_context_for_raylib = null;
 	}
-
 	// SetConfigFlags(xx ConfigFlags.WINDOW_RESIZABLE);
 	SetTargetFPS(60);
 
