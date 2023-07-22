@@ -120,10 +120,10 @@ get_rlgl_ptr :: () -> *RLGL_Data {
     return xx getRlglPtr();
 }
 
-update_camera_free_move :: (camera : *Camera) {
+update_camera_free_move :: (camera : *Camera, linear_speed_factor := 1., angular_speed_factor := 1.) {
     dt := GetFrameTime();
     {
-        speed := 5.;
+        speed := 5. * linear_speed_factor;
         x := cast(float)(cast(int)IsKeyDown(.D)) - (cast(int)IsKeyDown(.A));
         y := cast(float)(cast(int)IsKeyDown(.SPACE)) - (cast(int)IsKeyDown(.LEFT_SHIFT));
         z := cast(float)(cast(int)IsKeyDown(.W)) - (cast(int)IsKeyDown(.S));
@@ -133,7 +133,7 @@ update_camera_free_move :: (camera : *Camera) {
         CameraMoveForward(camera, speed * z * dt, true);        
     }
     {
-        speed := .0025;
+        speed := .0025 * angular_speed_factor;
         delta := GetMouseDelta();
         CameraYaw(camera, -delta.x * speed, false);
         CameraPitch(camera, -delta.y * speed, true, false, false);
