@@ -97,6 +97,21 @@ main :: () {
 
 	mesh := GenMeshCustom();
 	model := LoadModelFromMesh(mesh); defer UnloadModel(model);
+	print("mesh = %\nmodel = %\nmaterial = %\n", mesh, model, model.materials[0]);
+
+	{
+		arr : []s32;
+		arr.data = model.materials[0].shader.locs;
+		arr.count = 26;
+		print("locs = %\n", arr);		
+	}
+	{
+		arr : []MaterialMap;
+		arr.data = model.materials[0].maps;
+		arr.count = 12;
+		print("maps = %\n", arr);		
+
+	}
 
 	draw_scene :: () #expand {
 		ctx := context;
@@ -119,7 +134,7 @@ main :: () {
 	SetTargetFPS(60);
 
 	while !WindowShouldClose() {
-        UpdateCamera(*camera, .ORBITAL);
+		UpdateCamera(*camera, .ORBITAL);
 		draw_scene();
 		reset_temporary_storage();
 	}

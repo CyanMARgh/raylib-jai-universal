@@ -234,7 +234,7 @@ Camera3D :: struct {
 	target:     Vector3; // Camera target it looks-at
 	up:         Vector3; // Camera up vector (rotation over its axis)
 	fovy:       float; // Camera field-of-view aperture in Y (degrees) in perspective, used as near plane width in orthographic
-	projection: s32; // Camera projection: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
+	projection: CameraProjection; // Camera projection: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
 }
 
 Camera :: Camera3D;
@@ -866,6 +866,9 @@ ShaderLocationIndex :: enum s32 {
 	MAP_IRRADIANCE    :: 23;
 	MAP_PREFILTER     :: 24;
 	MAP_BRDF          :: 25;
+
+	MAP_DIFFUSE       :: MAP_ALBEDO;
+	MAP_SPECULAR      :: MAP_METALNESS;
 }
 SHADER_LOC_VERTEX_POSITION   :: ShaderLocationIndex.VERTEX_POSITION;
 SHADER_LOC_VERTEX_TEXCOORD01 :: ShaderLocationIndex.VERTEX_TEXCOORD01;
@@ -893,6 +896,8 @@ SHADER_LOC_MAP_CUBEMAP       :: ShaderLocationIndex.MAP_CUBEMAP;
 SHADER_LOC_MAP_IRRADIANCE    :: ShaderLocationIndex.MAP_IRRADIANCE;
 SHADER_LOC_MAP_PREFILTER     :: ShaderLocationIndex.MAP_PREFILTER;
 SHADER_LOC_MAP_BRDF          :: ShaderLocationIndex.MAP_BRDF;
+SHADER_LOC_MAP_DIFFUSE       :: ShaderLocationIndex.MAP_DIFFUSE;
+SHADER_LOC_MAP_SPECULAR      :: ShaderLocationIndex.MAP_SPECULAR;
 
 // Shader uniform data type
 ShaderUniformDataType :: enum s32 {
@@ -1193,7 +1198,7 @@ BeginTextureMode :: (target: RenderTexture2D) -> void #foreign raylib;
 EndTextureMode :: () -> void #foreign raylib;
 BeginShaderMode :: (shader: Shader) -> void #foreign raylib;
 EndShaderMode :: () -> void #foreign raylib;
-BeginBlendMode :: (mode: s32) -> void #foreign raylib;
+BeginBlendMode :: (mode: BlendMode) -> void #foreign raylib;
 EndBlendMode :: () -> void #foreign raylib;
 BeginScissorMode :: (x: s32, y: s32, width: s32, height: s32) -> void #foreign raylib;
 EndScissorMode :: () -> void #foreign raylib;
@@ -2088,6 +2093,24 @@ CameraRoll :: (camera: *Camera, angle: float) -> void #foreign raylib;
 
 GetCameraViewMatrix :: (camera: *Camera) -> Matrix #foreign raylib;
 GetCameraProjectionMatrix :: (camera: *Camera, aspect: float) -> Matrix #foreign raylib;
+
+DEFAULT_SHADER_ATTRIB_NAME_POSITION     :: "vertexPosition";    // Bound by default to shader location: 0
+DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD     :: "vertexTexCoord";    // Bound by default to shader location: 1
+DEFAULT_SHADER_ATTRIB_NAME_NORMAL       :: "vertexNormal";      // Bound by default to shader location: 2
+DEFAULT_SHADER_ATTRIB_NAME_COLOR        :: "vertexColor";       // Bound by default to shader location: 3
+DEFAULT_SHADER_ATTRIB_NAME_TANGENT      :: "vertexTangent";     // Bound by default to shader location: 4
+DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD2    :: "vertexTexCoord2";   // Bound by default to shader location: 5
+
+DEFAULT_SHADER_UNIFORM_NAME_MVP         :: "mvp";               // model-view-projection matrix
+DEFAULT_SHADER_UNIFORM_NAME_VIEW        :: "matView";           // view matrix
+DEFAULT_SHADER_UNIFORM_NAME_PROJECTION  :: "matProjection";     // projection matrix
+DEFAULT_SHADER_UNIFORM_NAME_MODEL       :: "matModel";          // model matrix
+DEFAULT_SHADER_UNIFORM_NAME_NORMAL      :: "matNormal";         // normal matrix (transpose(inverse(matModelView))
+DEFAULT_SHADER_UNIFORM_NAME_COLOR       :: "colDiffuse";        // color diffuse (base tint color, multiplied by texture color)
+DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0  :: "texture0";          // texture0 (texture slot active 0)
+DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1  :: "texture1";          // texture1 (texture slot active 1)
+DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  :: "texture2";          // texture2 (texture slot active 2)
+
 
 #scope_file
 
