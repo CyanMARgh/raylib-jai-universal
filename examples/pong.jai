@@ -2,7 +2,6 @@
 #import "Math";
 #import "Random";
 #import,dir "../Raylib";
-using RL;
 
 fit :: (rect : Rectangle, ratio := 1.5) -> Rectangle {
 	new_width := rect.height * ratio;

@@ -44,7 +44,7 @@ draw :: (using particle_system : *Particle_System) {
 		ratio := cast(float)GetScreenHeight() / GetScreenWidth();
 		set_uniform(draw_shader.id, "ratio", ratio);
 	}
-	print("particles_count = %\n", particles_count);
+	// print("particles_count = %\n", particles_count);
 	DisableDepthMask();
 		glDrawArrays(GL_TRIANGLES, 0, xx (particles_count * 6));
 	EnableDepthMask();

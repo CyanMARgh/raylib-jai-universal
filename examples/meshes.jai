@@ -1,72 +1,7 @@
 #import,dir "../Raylib";
-using RL;
 #import "Basic"()(MEMORY_DEBUGGER=true);
 #import "Math";
 #import "Random";
-
-fit :: (rect : Rectangle, ratio := 1.5) -> Rectangle {
-    new_width := rect.height * ratio;
-    new_height := rect.width / ratio;
-    result : Rectangle;
-    if new_width <= rect.width {
-        result = .{rect.x + (rect.width - new_width) / 2, rect.y, new_width, rect.height};
-    } else {
-        result = .{rect.x, rect.y + (rect.height - new_height) / 2, rect.width, new_height};
-    }
-    result.width = max(0., result.width);
-    result.height = max(0., result.height);
-    return result;
-}
-get_full_bounds :: () -> Rectangle {
-    W, H := GetScreenWidth(), GetScreenHeight();
-    return .{0., 0., xx W, xx H};
-}
-make_offset :: (rect : Rectangle, offset : float) -> Rectangle {
-    return .{rect.x + offset, rect.y + offset, rect.width - offset * 2, rect.height - offset * 2};
-}
-get_active_zone :: () -> Rectangle {
-    return fit(make_offset(get_full_bounds(), 10.), 1.5);
-}
-rand_dir :: () -> Vector2 {
-    phi := random_get_within_range(0., 2 * PI);
-    return .{sin(phi), cos(phi)};
-}
-random_reflect :: (_v : Vector2, right : bool) -> Vector2 {
-    v := _v + rand_dir() * .5;
-    v.x = abs(v.x) + .1;
-    normalize_or_zero(*v);
-    if !right v.x = -v.x;
-    return v;
-}
-
-// rl_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory: *void, allocator_data: *void) -> *void {
-// 	if mode == {
-// 		case .ALLOCATE;
-// 		return MemAlloc(xx size);
-
-// 		case .RESIZE;
-// 		return MemRealloc(old_memory, xx size);		
-
-// 		// case .FREE;
-// 		// MemFree(old_memory);
-// 		// return null;
-
-// 		// case .STARTUP;
-// 		// return null;
-
-// 		// case .SHUTDOWN;
-// 		// return null;
-
-// 		case;
-// 		assert(false, "invalid operation: %!", mode);
-// 	}
-// 	return null;
-// }
-
-// RL_ALLOCATOR :: Allocator.{
-// 	rl_allocator_proc,
-// 	null
-// };
 
 GenMeshCustom :: () -> Mesh {
 	vertices : [..]Vector3;
@@ -97,21 +32,6 @@ main :: () {
 
 	mesh := GenMeshCustom();
 	model := LoadModelFromMesh(mesh); defer UnloadModel(model);
-	print("mesh = %\nmodel = %\nmaterial = %\n", mesh, model, model.materials[0]);
-
-	{
-		arr : []s32;
-		arr.data = model.materials[0].shader.locs;
-		arr.count = 26;
-		print("locs = %\n", arr);		
-	}
-	{
-		arr : []MaterialMap;
-		arr.data = model.materials[0].maps;
-		arr.count = 12;
-		print("maps = %\n", arr);		
-
-	}
 
 	draw_scene :: () #expand {
 		ctx := context;
@@ -130,7 +50,6 @@ main :: () {
 		}
 		global_context_for_raylib = null;
 	}
-	// SetConfigFlags(xx ConfigFlags.WINDOW_RESIZABLE);
 	SetTargetFPS(60);
 
 	while !WindowShouldClose() {
