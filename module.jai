@@ -1,5 +1,5 @@
 #if OS == .LINUX || OS == .WINDOWS {
-    #load "raylib.jai";
+    #load "src/raylib.jai";
 } else {
     #assert(false, message = "Unsupported OS");
 }

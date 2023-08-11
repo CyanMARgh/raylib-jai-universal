@@ -5,14 +5,22 @@
 
 GenMeshCustom :: () -> Mesh {
 	vertices : [..]Vector3;
+	uvs : [..]Vector2;
+
 	array_add(*vertices, .{0, 0, 0});
 	array_add(*vertices, .{3, 4, 5});
 	array_add(*vertices, .{2, 0, 0});
 
-	mesh : Mesh;
-	mesh.triangleCount = 1;
-	mesh.vertexCount = mesh.triangleCount * 3;
-	mesh.vertices = xx vertices.data;
+	array_add(*uvs, .{0, 0});
+	array_add(*uvs, .{1, 0});
+	array_add(*uvs, .{0, 1});
+
+	mesh := Mesh.{
+		triangleCount = 1,
+		vertexCount = 3,
+		vertices = xx vertices.data,
+		texcoords = xx uvs.data
+	};
 
 	UploadMesh(*mesh, false);
 	return mesh;
@@ -27,11 +35,13 @@ main :: () {
 	camera := Camera.{.{5, 5, 5}, .{0, 0, 0}, .{0, 1, 0}, 45, 0};
 	position := Vector3.{0, 0, 0};
 
-	img_checked := GenImageChecked(2, 2, 1, 1, RED, GREEN); defer UnloadImage(img_checked);
+	img_checked := GenImageChecked(10, 10, 1, 1, RED, GREEN); defer UnloadImage(img_checked);
 	texture := LoadTextureFromImage(img_checked); defer UnloadTexture(texture);
 
-	mesh := GenMeshCustom();
-	model := LoadModelFromMesh(mesh); defer UnloadModel(model);
+	// mesh := GenMeshCustom();
+	// model := LoadModelFromMesh(mesh); defer UnloadModel(model);
+	model := LoadModelFromMesh(GenMeshPlane(2, 2, 1, 1)); defer UnloadModel(model);
+	model.materials[0].maps[0].texture = texture;
 
 	draw_scene :: () #expand {
 		ctx := context;
