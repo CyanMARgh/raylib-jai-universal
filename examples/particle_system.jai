@@ -10,7 +10,7 @@ Particle_System :: struct {
 }
 init :: (using particle_system : *Particle_System) {
 	vao = LoadVertexArray();
-	EnableVertexArray(vao); defer DisableVertexArray();
+	// EnableVertexArray(vao); defer DisableVertexArray();
 	vbo = LoadVertexBuffer(null, xx(particles_count * size_of(Particle)), true);
 
 	draw_shader = LoadShaderFromMemory(GLSL_VERT_PARTICLE, GLSL_FRAG_PARTICLE);

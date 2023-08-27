@@ -1,4 +1,4 @@
-#import,dir "../Raylib";
+#import,dir "..";
 #import "Math";
 #import "Basic"()(MEMORY_DEBUGGER = true);
 #import "GL";

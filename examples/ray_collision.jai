@@ -1,4 +1,4 @@
-#import,dir "../Raylib";
+#import,dir "..";
 #import "Basic"()(MEMORY_DEBUGGER=true);
 #import "Math";
 #import "Random";
