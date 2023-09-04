@@ -5,6 +5,7 @@
 #import "Random";
 #import "File";
 
+#load "video_builder.jai";
 #load "particle_system.jai";
 
 set_shader_value :: (shader : Shader, location : s32, value : $T, t0 := ShaderUniformDataType.FLOAT) {
@@ -214,12 +215,14 @@ find_intersection :: (camera : Camera) -> RayCollision {
 
 main :: () {
 	defer report_memory_leaks();
-	W, H : s32 = 800, 450;
+	// W, H : s32 = 800, 450;
+	W, H : s32 = 1920, 1080;
 
 	SetConfigFlags(.MSAA_4X_HINT);
 	SetConfigFlags(.WINDOW_RESIZABLE);
 	InitWindow(W, H, "basic lighting"); defer CloseWindow();
 	gl_load(*gl);
+	ToggleFullscreen();
 
 	camera := Camera.{position = .{2, 4, 6}, target = .{0, 0.5, 0}, up = .{0, 1, 0}, fovy = 45, projection = .PERSPECTIVE};
 	particle_system := Particle_System.{particles_count = 100000};
@@ -236,7 +239,14 @@ main :: () {
 
 	cam_state : enum u8 {FIXED; MOVE;} = .FIXED;
 
-	SetTargetFPS(60);
+	FPS :: 25;
+
+	ffmpeg := ffmpeg_start_rendering(W, H, fps = FPS, bitrate = 10000);
+	defer ffmpeg_end_rendering(*ffmpeg);		
+	buffer := make_frame(W, H);
+	defer clear(buffer);		
+
+	SetTargetFPS(FPS);
 	while (!WindowShouldClose()) {
 		set_camera_pos(*light_shader, camera);
 		for KeyboardKey.[.Y, .R, .G, .B] if IsKeyPressed(it) switch_light(*light_shader, it_index);
@@ -273,6 +283,7 @@ main :: () {
 			EndMode3D();
 			DrawFPS(10, 10);
 		EndDrawing();
+		ffmpeg_send_screenshot(*ffmpeg, *buffer);
 		reset_temporary_storage();
 	}
 }
