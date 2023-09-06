@@ -75,6 +75,14 @@
 
     #define STBTT_STATIC
     #define STB_TRUETYPE_IMPLEMENTATION
+
+#ifndef STBTT_malloc
+    #define STBTT_malloc(x,u) ((void)(u),RL_MALLOC(x))
+#endif
+#ifndef STBTT_free
+    #define STBTT_free(x,u) ((void)(u),RL_FREE(x))
+#endif
+
     #include "external/stb_truetype.h"      // Required for: ttf font data reading
 #endif
 
@@ -358,8 +366,9 @@ Font LoadFontEx(const char *fileName, int fontSize, int *fontChars, int glyphCou
 
     if (fileData != NULL)
     {
+        unsigned char* ext = GetFileExtension(fileName);
         // Loading font from memory data
-        font = LoadFontFromMemory(GetFileExtension(fileName), fileData, fileSize, fontSize, fontChars, glyphCount);
+        font = LoadFontFromMemory(ext, fileData, fileSize, fontSize, fontChars, glyphCount);
 
         UnloadFileData(fileData);
     }
@@ -518,12 +527,14 @@ Font LoadFontFromMemory(const char *fileType, const unsigned char *fileData, int
             font.texture = LoadTextureFromImage(atlas);
 
             // Update glyphs[i].image to use alpha, required to be used on ImageDrawText()
-            for (int i = 0; i < font.glyphCount; i++)
+            for (int i = 2; i < font.glyphCount; i++)
             {
+                // printf("(0.0) %d\n", i);
                 UnloadImage(font.glyphs[i].image);
+                // printf("(0.1) %d\n", i);
                 font.glyphs[i].image = ImageFromImage(atlas, font.recs[i]);
-            }
-
+                // printf("(0.2) %d\n", i);
+            }            
             UnloadImage(atlas);
 
             TRACELOG(LOG_INFO, "FONT: Data loaded successfully (%i pixel size | %i glyphs)", font.baseSize, font.glyphCount);
@@ -616,9 +627,16 @@ GlyphInfo *LoadFontData(const unsigned char *fileData, int dataSize, int fontSiz
                 //      stbtt_GetCodepointBitmapBox()        -- how big the bitmap must be
                 //      stbtt_MakeCodepointBitmap()          -- renders into bitmap you provide
 
-                if (type != FONT_SDF) chars[i].image.data = stbtt_GetCodepointBitmap(&fontInfo, scaleFactor, scaleFactor, ch, &chw, &chh, &chars[i].offsetX, &chars[i].offsetY);
-                else if (ch != 32) chars[i].image.data = stbtt_GetCodepointSDF(&fontInfo, scaleFactor, ch, FONT_SDF_CHAR_PADDING, FONT_SDF_ON_EDGE_VALUE, FONT_SDF_PIXEL_DIST_SCALE, &chw, &chh, &chars[i].offsetX, &chars[i].offsetY);
-                else chars[i].image.data = NULL;
+                if (type != FONT_SDF) {
+                    // printf("(0) i = %d\n", i);
+                    chars[i].image.data = stbtt_GetCodepointBitmap(&fontInfo, scaleFactor, scaleFactor, ch, &chw, &chh, &chars[i].offsetX, &chars[i].offsetY);
+                } else if (ch != 32) {
+                    // printf("(1) i = %d\n", i);
+                    chars[i].image.data = stbtt_GetCodepointSDF(&fontInfo, scaleFactor, ch, FONT_SDF_CHAR_PADDING, FONT_SDF_ON_EDGE_VALUE, FONT_SDF_PIXEL_DIST_SCALE, &chw, &chh, &chars[i].offsetX, &chars[i].offsetY);
+                } else {
+                    // printf("(2) i = %d\n", i);
+                    chars[i].image.data = NULL;
+                }
 
                 stbtt_GetCodepointHMetrics(&fontInfo, ch, &chars[i].advanceX, NULL);
                 chars[i].advanceX = (int)((float)chars[i].advanceX*scaleFactor);
@@ -643,6 +661,8 @@ GlyphInfo *LoadFontData(const unsigned char *fileData, int dataSize, int fontSiz
                     };
 
                     chars[i].image = imSpace;
+                    // printf("(3) i = %d\n", i);
+                    // exit(43);
                 }
 
                 if (type == FONT_BITMAP)
