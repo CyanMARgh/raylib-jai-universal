@@ -1,5 +1,5 @@
 COMPILE       :: true;
-COMPILE_DEBUG :: true;
+COMPILE_DEBUG :: false;
 GENERATE_BINDINGS :: false;
 
 RAYLIB_PATH :: "src";
@@ -61,7 +61,7 @@ DECLARATIONS_TO_OMIT :: string.[
             #if COMPILE_DEBUG {
                 array_add(*raylib_flags, ..string.["-std=c99", "-O0", "-g"]);
             } else {
-                array_add(*raylib_flags, ..string.["-std=c99", "-Os", "-flto"]);
+                array_add(*raylib_flags, ..string.["-std=c99", "-O3"]);
             }
 
             // success &&= build_cpp_dynamic_lib("linux/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
