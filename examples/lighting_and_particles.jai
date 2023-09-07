@@ -8,6 +8,8 @@
 #load "video_builder.jai";
 #load "particle_system.jai";
 
+RENDER_VIDEO :: false;
+
 set_shader_value :: (shader : Shader, location : s32, value : $T, t0 := ShaderUniformDataType.FLOAT) {
 	is_enum_s32 :: ($T : Type) -> bool {
 		ti := type_info(T);
@@ -239,12 +241,15 @@ main :: () {
 
 	cam_state : enum u8 {FIXED; MOVE;} = .FIXED;
 
-	FPS :: 25;
-
-	ffmpeg := ffmpeg_start_rendering(W, H, fps = FPS, bitrate = 10000);
-	defer ffmpeg_end_rendering(*ffmpeg);		
-	buffer := make_frame(W, H);
-	defer clear(buffer);		
+	#if RENDER_VIDEO {
+		FPS :: 30;
+		ffmpeg := ffmpeg_start_rendering(W, H, fps = FPS, bitrate = 10000);
+		defer ffmpeg_end_rendering(*ffmpeg);		
+		buffer := make_frame(W, H);
+		defer clear(buffer);				
+	} else {
+		FPS :: 120;
+	}
 
 	SetTargetFPS(FPS);
 	while (!WindowShouldClose()) {
@@ -283,7 +288,9 @@ main :: () {
 			EndMode3D();
 			DrawFPS(10, 10);
 		EndDrawing();
-		ffmpeg_send_screenshot(*ffmpeg, *buffer);
+		#if RENDER_VIDEO {
+			ffmpeg_send_screenshot(*ffmpeg, *buffer);
+		}
 		reset_temporary_storage();
 	}
 }
