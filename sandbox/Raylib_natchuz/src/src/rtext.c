@@ -299,6 +299,7 @@ Font GetFontDefault()
 // Load Font from file into GPU memory (VRAM)
 Font LoadFont(const char *fileName)
 {
+    int* ptr = 0x1; RL_FREE(ptr);
     // Default values for ttf font generation
 #ifndef FONT_TTF_DEFAULT_SIZE
     #define FONT_TTF_DEFAULT_SIZE           32      // TTF font generation default char size (char-height)
@@ -356,6 +357,7 @@ Font LoadFontEx(const char *fileName, int fontSize, int *fontChars, int glyphCou
 
     if (fileData != NULL)
     {
+
         // Loading font from memory data
         font = LoadFontFromMemory(GetFileExtension(fileName), fileData, fileSize, fontSize, fontChars, glyphCount);
 

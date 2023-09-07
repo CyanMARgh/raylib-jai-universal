@@ -171,7 +171,7 @@ Image :: struct {
 	width:   s32; // Image base width
 	height:  s32; // Image base height
 	mipmaps: s32; // Mipmap levels, 1 by default
-	format:  s32; // Data format (PixelFormat type)
+	format:  PixelFormat; // Data format (PixelFormat type)
 }
 
 // Texture, tex data stored in GPU memory (VRAM)
