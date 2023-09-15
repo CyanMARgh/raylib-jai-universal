@@ -161,8 +161,8 @@ Rectangle :: struct {
 	y:      float; // Rectangle top-left corner position y
 	width:  float; // Rectangle width
 	height: float; // Rectangle height
-	// #place x; corner : Vector2;
-	// #place width; size : Vector2;
+	#place x; corner : Vector2;
+	#place width; size : Vector2;
 }
 
 // Image, pixel data stored in CPU memory (RAM)
