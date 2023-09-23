@@ -2118,4 +2118,6 @@ DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  :: "texture2";          // texture2 (tex
     raylib :: #library,no_dll "linux/raylib";
 } else #if OS == .WINDOWS {
     raylib :: #library,no_dll "windows/raylib";
+} else #if OS == .MACOS {
+    raylib :: #library,no_dll "macos/raylib";
 }
