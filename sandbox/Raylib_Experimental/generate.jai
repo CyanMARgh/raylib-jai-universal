@@ -66,6 +66,20 @@ DECLARATIONS_TO_OMIT :: string.[
 
             // success &&= build_cpp_dynamic_lib("linux/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
             success &&= build_cpp_static_lib("linux/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
+        } else #if OS == .MACOS {
+            make_directory_if_it_does_not_exist("macos");
+            
+            raylib_flags: [..] string;
+            array_add(*raylib_flags, ..string.["-D_DEFAULT_SOURCE", "-DPLATFORM_DESKTOP", "-DGRAPHICS_API_OPENGL_33"]);
+            array_add(*raylib_flags, ..string.["-Isrc/src/external/glfw/include", "-ObjC"]);
+            #if COMPILE_DEBUG {
+                array_add(*raylib_flags, ..string.["-std=c99", "-O0", "-g"]);
+            } else {
+                array_add(*raylib_flags, ..string.["-std=c99", "-O3"]);
+            }
+
+            // success &&= build_cpp_dynamic_lib("macos/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
+            success &&= build_cpp_static_lib("macos/raylib", ..raylib_src_files, extra = raylib_flags, debug=COMPILE_DEBUG);
         } else {
             assert(false);
         }

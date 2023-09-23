@@ -5,3 +5,7 @@
 # examples/raygui_minimum
 examples/.build/
 *.pdb
+
+*.DS_Store
+
+*.dSYM
