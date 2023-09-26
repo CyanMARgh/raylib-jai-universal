@@ -5,7 +5,7 @@
 #import "Random";
 #import "File";
 
-#load "video_builder.jai";
+// #load "video_builder.jai";
 #load "particle_system.jai";
 
 RENDER_VIDEO :: false;
@@ -218,17 +218,20 @@ find_intersection :: (camera : Camera) -> RayCollision {
 main :: () {
 	defer report_memory_leaks();
 	// W, H : s32 = 800, 450;
-	W, H : s32 = 1920, 1080;
+	W, H : s32 = 1200, 800;
 
 	SetConfigFlags(.MSAA_4X_HINT);
 	SetConfigFlags(.WINDOW_RESIZABLE);
 	InitWindow(W, H, "basic lighting"); defer CloseWindow();
 	gl_load(*gl);
-	ToggleFullscreen();
+	// ToggleFullscreen();
 
 	camera := Camera.{position = .{2, 4, 6}, target = .{0, 0.5, 0}, up = .{0, 1, 0}, fovy = 45, projection = .PERSPECTIVE};
-	particle_system := Particle_System.{particles_count = 100000};
+	particle_system : Particle_System;
+
+	print("(0)\n");
 	init(*particle_system); defer deinit(*particle_system);
+	print("(1)\n");
 
 	light_shader : Light_Shader; init(*light_shader); defer deinit(*light_shader);
 	light_shader.lights = .[.{position = .{-2,  1, -2}, color = YELLOW}, .{position = .{ 2,  1,  2}, color = RED}, .{position = .{-2,  1,  2}, color = GREEN}, .{position = .{ 2,  1, -2}, color = BLUE}];
@@ -271,7 +274,7 @@ main :: () {
 			if IsMouseButtonDown(.LEFT) {
 				coll := find_intersection(camera);
 				if coll.hit {
-					emit(*particle_system, coll.point);
+					emit(*particle_system, 10, coll.point);
 				}
 			}
 			case .MOVE;
@@ -288,6 +291,7 @@ main :: () {
 			EndMode3D();
 			DrawFPS(10, 10);
 		EndDrawing();
+
 		#if RENDER_VIDEO {
 			ffmpeg_send_screenshot(*ffmpeg, *buffer);
 		}
