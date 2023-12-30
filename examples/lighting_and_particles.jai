@@ -5,10 +5,12 @@
 #import "Random";
 #import "File";
 
-// #load "video_builder.jai";
 #load "particle_system.jai";
 
-RENDER_VIDEO :: false;
+RENDER_VIDEO :: true;
+#if RENDER_VIDEO {
+	#load "video_builder.jai";
+}
 
 set_shader_value :: (shader : Shader, location : s32, value : $T, t0 := ShaderUniformDataType.FLOAT) {
 	is_enum_s32 :: ($T : Type) -> bool {

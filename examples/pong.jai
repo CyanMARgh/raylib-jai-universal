@@ -33,7 +33,7 @@ rand_dir :: () -> Vector2 {
 random_reflect :: (_v : Vector2, right : bool) -> Vector2 {
 	v := _v + rand_dir() * .5;
 	v.x = abs(v.x) + .1;
-	normalize_or_zero(*v);
+	normalize(*v);
 	if !right v.x = -v.x;
 	return v;
 }
